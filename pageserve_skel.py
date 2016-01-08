@@ -5,11 +5,7 @@ Socket programming in Python
   Based largely on https://docs.python.org/3.4/howto/sockets.html
   This trivial implementation is not robust:  We have omitted decent
   error handling and many other things to keep the illustration as simple
-  as possible. 
-
-  FIXME:
-  Currently this program always serves an ascii graphic of a cat.
-  Change it to serve files if they end with .html and are in the current directory
+  as possible.
 """
 
 import socket    # Basic TCP/IP communication on the internet
@@ -51,12 +47,6 @@ def serve(sock, func):
         _thread.start_new_thread(func, (clientsocket,))
 
 
-CAT = """
-     ^ ^
-   =(   )=
-   """
-
-
 def respond(sock):
     """
     Respond (only) to GET
@@ -68,9 +58,19 @@ def respond(sock):
     print("\nRequest was {}\n".format(request))
 
     parts = request.split()
-    if len(parts) > 1 and parts[0] == "GET":
-        transmit("HTTP/1.0 200 OK\n\n", sock)
-        transmit(CAT, sock)
+    filename = parts[1].lstrip("/")
+    
+    if len(parts) > 1 and parts[0] == "GET" and (
+        filename.endswith(".html") or filename.endswith(".css")):
+        
+        try:
+            read_file = open(filename, "r").read()        
+            transmit("HTTP/1.0 200 OK\n\n", sock)
+            transmit(read_file, sock)
+            
+        except FileNotFoundError:
+            transmit("\nError: 404\nFile {} can not be found in directory\n".format(filename), sock)
+            
     else:
         transmit("\nI don't handle this request: {}\n".format(request), sock)
 
