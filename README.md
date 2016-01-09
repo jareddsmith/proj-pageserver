@@ -2,7 +2,7 @@
 Jared Smith
 951452843
 Repository found at https://github.com/jareddsmith/proj-pageserver.git
-http://ix.cs.uoregon.edu/~jsmith/cis322/htbin/proj-pageserver/pageserve_skel.py.
+http://ix.cs.uoregon.edu/~jsmith/cis322/htbin/proj-pageserver
 
 
 A "getting started" project for CIS 322, software engineering 1 at University of Oregon.
